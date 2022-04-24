@@ -1,0 +1,30 @@
+* {
+   font-family: "padauk";
+}
+
+a {
+   text-decoration: none;
+   color: grey;
+}
+
+.para {
+   text-align: justify;
+   line-height: 30px;
+}
+
+.loadingBox {
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   z-index: 1000;
+   transform: translate(-100px, -75px)
+}
+
+.loadingBox>img {
+   width: 200px;
+   height: 150px;
+}
+
+.fixHeight {
+   min-height: 500px;
+}
