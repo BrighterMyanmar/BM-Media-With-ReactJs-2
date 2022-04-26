@@ -13,21 +13,19 @@ import logoImg from '../statics/logo.png';
 import HomeAffair from './shares/HomeAffair';
 import SideNews from './shares/SideNews';
 import SideVideoNews from './shares/SideVideoNews';
+import { getData } from '../utils/Api';
 
 export default function Home() {
    const [hotnews, setHotNews] = useState([]);
    const [catposts, setCatPosts] = useState([]);
    const loadHotNews = async () => {
-      const response = await fetch("http://13.214.58.126:3001/posts/bytag/6264c1c2d31b2d117e3c1867");
-      const resData = await response.json();
-      setHotNews(resData.result.splice(0, 6));
+      const data = await getData("/posts/bytag/6264c1c2d31b2d117e3c1867");
+      setHotNews(data.result.splice(0, 6));
+
+      const data2 = await getData("/posts/bycat/626526c302e3e94e7b2f2ab3");
+      setCatPosts(data2.result.splice(0, 6));
    }
-   const loadPostByCat = async () => {
-      const response = await fetch("http://13.214.58.126:3001/posts/bycat/626526c302e3e94e7b2f2ab3");
-      const resData = await response.json();
-      setCatPosts(resData.result.splice(0, 6));
-   }
-   useEffect(() => { loadHotNews(); loadPostByCat() }, []);
+   useEffect(() => loadHotNews, []);
    return (
       <div className="container">
          <div className="row mt-3">
@@ -81,9 +79,7 @@ export default function Home() {
                   <button className="btn btn-danger btn-sm rounded-0">Hot NEWS</button>
                   <button className="btn btn-danger btn-sm rounded-0">Read More</button>
                </div>
-               <SideNews image={p1} />
-               <SideNews image={p1} />
-               <SideNews image={p1} />
+               {hotnews.length > 0 && hotnews.map(hn => <SideNews key={hn._id} post={hn} wordcount={50} />)}
                <div className="mt-3 bg-dark p-2 d-flex justify-content-between">
                   <button className="btn btn-danger btn-sm rounded-0">TV NEWS</button>
                   <button className="btn btn-danger btn-sm rounded-0">Read More</button>

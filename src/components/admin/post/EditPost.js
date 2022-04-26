@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../../shares/Loading';
+import { getData, patchData } from '../../../utils/Api';
 
 const EditPost = () => {
    const [title, setTitle] = useState('');
@@ -17,8 +18,7 @@ const EditPost = () => {
    const navigate = useNavigate();
 
    const loadSingleCat = async () => {
-      const response = await fetch(`http://13.214.58.126:3001/posts/${id}`);
-      const resData = await response.json();
+      const resData = await getData(`/posts/${id}`);
       const curPost = resData.result;
       setTitle(curPost.title);
       setContent(curPost.content);
@@ -27,8 +27,7 @@ const EditPost = () => {
    }
 
    const loadCats = async () => {
-      const response = await fetch("http://13.214.58.126:3001/cats");
-      const resData = await response.json();
+      const resData = await getData("/cats");
       if (resData.con) {
          setCats(resData.result);
       } else {
@@ -37,8 +36,7 @@ const EditPost = () => {
    }
 
    const loadTags = async () => {
-      const response = await fetch("http://13.214.58.126:3001/tags");
-      const resData = await response.json();
+      const resData = await getData("/tags");
       console.log(resData);
       setTags(resData.result);
    }
@@ -48,15 +46,7 @@ const EditPost = () => {
 
    const apiPatchPost = async () => {
       const updateData = { title, cat, tag, content };
-      const response = await fetch(`http://13.214.58.126:3001/posts/${id}`, {
-         method: "PATCH",
-         body: JSON.stringify(updateData),
-         headers: {
-            'content-type':'application/json',
-            authorization: `Bearer ${userData.token}`
-         }
-      });
-      const resData = await response.json();
+      const resData = await patchData(`http://13.214.58.126:3001/posts/${id}`, updateData, userData.token);
       if (resData.con) {
          navigate('/admin/posts/all');
       } else {

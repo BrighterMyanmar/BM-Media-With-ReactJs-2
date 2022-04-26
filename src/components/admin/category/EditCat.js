@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../../shares/Loading';
+import { patchData, getData } from '../../../utils/Api';
 
 const EditCat = () => {
    const [name, setName] = useState('');
@@ -12,16 +13,7 @@ const EditCat = () => {
    const { id } = useParams();
 
    const apiCategoryUpdate = async () => {
-      const response = await fetch(`http://13.214.58.126:3001/cats/${id}`, {
-         method: "PATCH",
-         body: JSON.stringify({ name: name }),
-         headers: {
-            'content-type': 'application/json',
-            authorization: `Bearer ${userData.token}`
-         }
-      });
-      const resData = await response.json();
-      console.log(resData);
+      const resData = await patchData(`/cats/${id}`, { name: name }, userData.token);
       if (resData.con) {
          navigate('/admin/cats/all')
       } else {
@@ -30,8 +22,7 @@ const EditCat = () => {
       setIsLoading(false);
    }
    const loadCategory = async () => {
-      const response = await fetch(`http://13.214.58.126:3001/cats/${id}`);
-      const resData = await response.json();
+      const resData = await getData(`/cats/${id}`);
       setName(resData.result.name);
       setIsLoading(false);
    }

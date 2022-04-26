@@ -28,3 +28,17 @@ a {
 .fixHeight {
    min-height: 500px;
 }
+.parafontsize{
+   font-size:14px;
+   line-height:28px;
+}
+.titlefontsize{
+   font-size:16px;
+   font-weight: bold;
+}
+.hotnews > p{
+   text-indent: 45px;
+   margin-top:25px;
+   font-size:14px;
+   line-height:28px;
+}

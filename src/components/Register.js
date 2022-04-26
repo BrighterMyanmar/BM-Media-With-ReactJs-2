@@ -1,24 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "./shares/Loading";
+import { postData } from "../utils/Api";
 
 export default function Register() {
    const [name, setName] = useState('');
    const [email, setEmail] = useState('');
    const [phone, setPhone] = useState('');
    const [password, setPassword] = useState('');
-   const [isLoading,setIsLoading] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
    const navigate = useNavigate();
 
    const apiRegister = async user => {
-      const response = await fetch("http://13.214.58.126:3001/users/register", {
-         method: "POST",
-         body: JSON.stringify(user),
-         headers: {
-            "content-type": "application/json"
-         }
-      });
-      const resData = await response.json();
+      const resData = await fetch("/register", user, "");
       if (resData.con) {
          navigate('/login');
       } else {

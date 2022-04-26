@@ -16,13 +16,18 @@ import EditTag from "./components/admin/tag/EditTag";
 import AllPost from "./components/admin/post/AllPost";
 import AddPost from "./components/admin/post/AddPost";
 import EditPost from "./components/admin/post/EditPost";
+import CatPage from "./components/CatPage";
+import PostDetail from "./components/PostDetail";
+import ErrorBoundary from "./components/shares/ErrorBoundary";
 
 function App() {
    return (
-      <div>
+      <ErrorBoundary>
          <Nav />
          <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/catpage" element={<CatPage />} />
+            <Route path="/postdetail/:id" element={<PostDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin" element={<RouteGurad><Admin /></RouteGurad>}>
@@ -45,7 +50,7 @@ function App() {
             <Route path="*" element={<FallBackRoute />} />
          </Routes>
          <Footer />
-      </div>
+      </ErrorBoundary>
    );
 }
 

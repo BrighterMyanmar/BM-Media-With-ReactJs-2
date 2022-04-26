@@ -1,27 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "./shares/Loading";
 import { addUser, removeUser } from "../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { postData } from "../utils/Api";
 
 
 export default function Login() {
-   const [phone, setPhone] = useState('09600600600');
-   const [password, setPassword] = useState('123123123');
+   const localDB = "bmmedia";
+   const [isCheck, setIsCheck] = useState(false);
+   const [phone, setPhone] = useState('');
+   const [password, setPassword] = useState('');
    const [isLoading, setIsLoading] = useState(false);
    const userData = useSelector(state => state.userData);
    const navigate = useNavigate();
    const dispatch = useDispatch();
 
    const apiLogin = async user => {
-      const response = await fetch("http://13.214.58.126:3001/users", {
-         method: 'POST',
-         body: JSON.stringify(user),
-         headers: { "content-type": "application/json" }
-      });
-      const resData = await response.json();
+      const resData = await postData("/users", user, "");
       if (resData.con) {
          setIsLoading(false);
+         if (isCheck) {
+            localStorage.setItem(localDB, JSON.stringify({ phone, password }));
+         } else {
+            localStorage.removeItem(localDB);
+         }
          dispatch(addUser(resData.result));
          navigate('/admin');
       } else {
@@ -29,13 +32,21 @@ export default function Login() {
       }
    }
 
+   useEffect(() => {
+      let data = JSON.parse(localStorage.getItem(localDB));
+      if (data) {
+         setIsCheck(true);
+         setPhone(data.phone);
+         setPassword(data.password)
+      }
+   }, [])
+
    const loginUser = e => {
       e.preventDefault();
       setIsLoading(true);
       let user = { phone, password };
       apiLogin(user);
    }
-
    return (
       <div className="container my-5">
          {isLoading && <Loading />}
@@ -60,7 +71,10 @@ export default function Login() {
                      className="form-control rounded-0  bg-dark text-white" id="password" />
                </div>
                <div className="mb-3 form-check">
-                  <input type="checkbox" className="form-check-input" id="rememberCheck" />
+                  <input type="checkbox" className="form-check-input" id="rememberCheck"
+                     checked={isCheck}
+                     onChange={e => setIsCheck(e.target.checked)}
+                  />
                   <label className="form-check-label text-white" htmlFor="rememberCheck">Remember Me</label>
                </div>
                <div className="d-flex justify-content-between mt-4">

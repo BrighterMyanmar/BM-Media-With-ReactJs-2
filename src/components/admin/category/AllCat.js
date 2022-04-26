@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import UiCat from './UiCat';
+import { getData, deleteData } from '../../../utils/Api';
 
 const AllCat = () => {
    const [cats, setCats] = useState([]);
    const userData = useSelector(state => state.userData);
    const loadCats = async () => {
-      const response = await fetch("http://13.214.58.126:3001/cats");
-      const resData = await response.json();
+      const resData = await getData("/cats");
       if (resData.con) {
          setCats(resData.result);
       } else {
@@ -16,15 +16,7 @@ const AllCat = () => {
       }
    }
    const apiCatDelete = async (id) => {
-      const response = await fetch(`http://13.214.58.126:3001/cats/${id}`, {
-         method: "DELETE",
-         headers: {
-            'content-type': "application/json",
-            authorization: `Bearer ${userData.token}`
-         }
-      });
-      const resData = await response.json();
-      console.log(resData);
+      const resData = await deleteData(`/cats/${id}`, userData.token);
       loadCats();
    }
    useEffect(() => {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../../shares/Loading';
+import { patchData, getData } from '../../../utils/Api';
 
 const EditTag = () => {
    const [name, setName] = useState('');
@@ -12,16 +13,7 @@ const EditTag = () => {
    const { id } = useParams();
 
    const apiTagUpdate = async () => {
-      const response = await fetch(`http://13.214.58.126:3001/tags/${id}`, {
-         method: "PATCH",
-         body: JSON.stringify({ name: name }),
-         headers: {
-            'content-type': 'application/json',
-            authorization: `Bearer ${userData.token}`
-         }
-      });
-      const resData = await response.json();
-      console.log(resData);
+      const resData = await patchData(`/tags/${id}`, { name: name }, userData.token);
       if (resData.con) {
          navigate('/admin/tags/all')
       } else {
@@ -30,8 +22,7 @@ const EditTag = () => {
       setIsLoading(false);
    }
    const loadCategory = async () => {
-      const response = await fetch(`http://13.214.58.126:3001/tags/${id}`);
-      const resData = await response.json();
+      const resData = await getData(`/tags/${id}`);
       setName(resData.result.name);
       setIsLoading(false);
    }

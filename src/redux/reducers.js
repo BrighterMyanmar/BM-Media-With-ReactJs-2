@@ -26,10 +26,18 @@ export const userReducer = (state = null, { type, payload }) => {
          return state;
    }
 }
+export const pageReducer = (state = { type: 'bycat', id: null }, { type, payload }) => {
+   switch (type) {
+      case "setPage": return state = payload;
+      default:
+         return state;
+   }
+}
 
 const reducers = combineReducers({
    siteData: siteDataReducer,
-   userData: userReducer
+   userData: userReducer,
+   pageSetter: pageReducer
 });
 
 export default reducers;

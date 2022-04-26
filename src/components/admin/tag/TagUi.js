@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { getImage } from '../../../utils/Api'
 
 const TagUi = ({ tag, apiTagDelete }) => {
    return (
@@ -9,7 +10,7 @@ const TagUi = ({ tag, apiTagDelete }) => {
             <div className="card-body">
                <div className="row">
                   <div className="col-md-6">
-                     <img src={`http://13.214.58.126:3001/uploads/${tag.image}`} width="100%" height="50px" />
+                     <img src={getImage(tag.image)} width="100%" height="50px" />
                   </div>
                   <div className="col-md-6">
                      <strong>{tag.name}</strong><br />
